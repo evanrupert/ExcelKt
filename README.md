@@ -8,7 +8,30 @@ An idiomatic Kotlin wrapper over the Apache POI Excel library for easily generat
 - Very lightweight
 
 ### Installation
-TODO
+In your `build.gradle.kts` or `build.gradle` add the following
+
+If `build.gradle.kts`
+```kotlin
+repositories {
+    jcenter()
+    maven(url = "https://jitpack.io")
+}
+
+dependencies {
+    implementation("com.github.EvanRupert:ExcelKt:v0.1.0")
+}
+```
+If `build.gradle`
+```groovy
+repositories {
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.EvanRupert:ExcelKt:v0.1.0'
+}
+```
 
 ### Quick Example
 ```kotlin
