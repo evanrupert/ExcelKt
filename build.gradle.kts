@@ -4,7 +4,8 @@
  * This generated file contains a sample Kotlin library project to get you started.
  */
 
-version = "1.0"
+version = "0.1.0"
+group = "com.github.EvanRupert"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
@@ -13,6 +14,8 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
 }
+
+apply(plugin = "maven")
 
 repositories {
     // Use jcenter for resolving dependencies.
