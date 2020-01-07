@@ -1,0 +1,152 @@
+package excelkt
+
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.xssf.usermodel.*
+import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+import com.nhaarman.mockitokotlin2.check as argCheck
+
+class ElementsTest {
+    private val mockXSSFCell: XSSFCell = mock()
+    private val mockXSSFRow: XSSFRow = mock {
+        on { createCell(com.nhaarman.mockitokotlin2.any()) } doReturn mockXSSFCell
+    }
+    private val mockXSSFSheet: XSSFSheet = mock {
+        on { createRow(com.nhaarman.mockitokotlin2.any()) } doReturn mockXSSFRow
+    }
+    private val mockXSSFWorkbook: XSSFWorkbook = mock {
+        on { createSheet() } doReturn mockXSSFSheet
+        on { createFont() } doReturn mock()
+        on { createCellStyle() } doReturn mock()
+    }
+
+    private val wb: Workbook = Workbook(mockXSSFWorkbook, null)
+
+    @Test
+    fun `the sheet method creates a new sheet`() {
+        wb.apply {
+            sheet {}
+        }
+
+        verify(mockXSSFWorkbook).createSheet()
+    }
+
+    @Test
+    fun `the workbook can create a new cell style`() {
+        wb.createCellStyle()
+
+        verify(mockXSSFWorkbook).createCellStyle()
+    }
+
+    @Test
+    fun `the workbook can create a new font`() {
+        wb.createFont()
+
+        verify(mockXSSFWorkbook).createFont()
+    }
+
+    @Test
+    fun `the sheet method can optionally take in a name`() {
+        wb.apply {
+            sheet("Test Sheet") {}
+        }
+
+        verify(mockXSSFWorkbook).createSheet("Test Sheet")
+    }
+
+    @Test
+    fun `the row method can create multiple rows with proper indices`() {
+        wb.apply {
+            sheet {
+                row {}
+                row {}
+                row {}
+            }
+        }
+
+        verify(mockXSSFSheet).createRow(eq(0))
+        verify(mockXSSFSheet).createRow(eq(1))
+        verify(mockXSSFSheet).createRow(eq(2))
+    }
+
+    @Test
+    fun `the cell method can create multiple cells with proper indices and proper content`() {
+        wb.apply {
+            sheet {
+                row {
+                    cell("Hello, First Cell!")
+                    cell("Hello, Second Cell!")
+                }
+            }
+        }
+
+        verify(mockXSSFRow).createCell(eq(0))
+        verify(mockXSSFRow).createCell(eq(1))
+
+        verify(mockXSSFCell).setCellValue(eq("Hello, First Cell!"))
+        verify(mockXSSFCell).setCellValue(eq("Hello, Second Cell!"))
+    }
+
+    @Test
+    fun `the cell style is properly being set`() {
+        val style = createStyleWith { fillBackgroundColor = IndexedColors.AQUA.index }
+
+        wb.apply {
+            sheet {
+                row {
+                    cell("Hello, World!", style)
+                }
+            }
+        }
+
+        verify(mockXSSFCell).cellStyle = argCheck {
+            expectThat(it.fillBackgroundColor).isEqualTo(IndexedColors.AQUA.index)
+        }
+    }
+
+    @Test
+    fun `styles are passed down from the top if not overrode`() {
+        val style = createStyleWith { fillBackgroundColor = IndexedColors.AQUA.index }
+
+        val styalizedWorkbook = Workbook(mockXSSFWorkbook, style)
+
+        styalizedWorkbook.apply {
+            sheet {
+                row {
+                    cell("Hello, World!")
+                }
+            }
+        }
+
+        verify(mockXSSFCell).cellStyle = argCheck {
+            expectThat(it.fillBackgroundColor).isEqualTo(IndexedColors.AQUA.index)
+        }
+    }
+
+    @Test
+    fun `lower element styles overwrite higher element styles`() {
+        val style = createStyleWith { fillBackgroundColor = IndexedColors.AQUA.index }
+        val newStyle = createStyleWith { fillBackgroundColor = IndexedColors.TEAL.index }
+
+        wb.apply {
+            sheet(style = style) {
+                row {
+                    cell("Hello, World!", newStyle)
+                }
+            }
+        }
+
+        verify(mockXSSFCell).cellStyle = argCheck {
+            expectThat(it.fillBackgroundColor).isEqualTo(IndexedColors.TEAL.index)
+        }
+
+    }
+
+    private fun createStyleWith(f: XSSFCellStyle.() -> Unit): XSSFCellStyle =
+        XSSFWorkbook().createCellStyle().apply(f)
+}
