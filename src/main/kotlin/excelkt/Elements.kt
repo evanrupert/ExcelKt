@@ -22,6 +22,8 @@ class Workbook(
             style = style ?: this.style,
             name = name
         ).apply(init)
+    fun createCellStyle(f: XSSFCellStyle.() -> Unit = { }) = xssfWorkbook.createCellStyle().apply(f)
+    fun createFont(f: XSSFFont.() -> Unit = { }): XSSFFont = xssfWorkbook.createFont().apply(f)
 }
 
 class Sheet(
