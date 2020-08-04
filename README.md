@@ -73,8 +73,8 @@ fun main() {
 fun Sheet.customersHeader() {
     val headings = listOf("Id", "Name", "Address", "Age")
 
-    val headingStyle = createCellStyle().apply {
-        setFont(createFont().apply {
+    val headingStyle = createCellStyle {
+        setFont(createFont {
             fontName = "IMPACT"
             color = IndexedColors.PINK.index
         })
