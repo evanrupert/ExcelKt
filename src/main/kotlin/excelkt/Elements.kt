@@ -8,8 +8,8 @@ annotation class ExcelElementMarker
 @ExcelElementMarker
 abstract class ExcelElement {
     abstract val xssfWorkbook: XSSFWorkbook
-    fun createCellStyle(): XSSFCellStyle = xssfWorkbook.createCellStyle()
-    fun createFont(): XSSFFont = xssfWorkbook.createFont()
+    fun createCellStyle(f: XSSFCellStyle.() -> Unit = { }): XSSFCellStyle = xssfWorkbook.createCellStyle().apply(f)
+    fun createFont(f: XSSFFont.() -> Unit = { }): XSSFFont = xssfWorkbook.createFont().apply(f)
 }
 
 class Workbook(
@@ -22,8 +22,6 @@ class Workbook(
             style = style ?: this.style,
             name = name
         ).apply(init)
-    fun createCellStyle(f: XSSFCellStyle.() -> Unit = { }) = xssfWorkbook.createCellStyle().apply(f)
-    fun createFont(f: XSSFFont.() -> Unit = { }): XSSFFont = xssfWorkbook.createFont().apply(f)
 }
 
 class Sheet(

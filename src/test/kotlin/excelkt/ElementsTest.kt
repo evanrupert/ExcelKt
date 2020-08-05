@@ -1,9 +1,6 @@
 package excelkt
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.*
 import org.junit.Test
@@ -12,6 +9,8 @@ import strikt.assertions.isEqualTo
 import com.nhaarman.mockitokotlin2.check as argCheck
 
 class ElementsTest {
+    private val mockXSSFFont: XSSFFont = mock()
+    private val mockXSSFCellStyle: XSSFCellStyle = mock()
     private val mockXSSFCell: XSSFCell = mock()
     private val mockXSSFRow: XSSFRow = mock {
         on { createCell(com.nhaarman.mockitokotlin2.any()) } doReturn mockXSSFCell
@@ -21,8 +20,8 @@ class ElementsTest {
     }
     private val mockXSSFWorkbook: XSSFWorkbook = mock {
         on { createSheet() } doReturn mockXSSFSheet
-        on { createFont() } doReturn mock()
-        on { createCellStyle() } doReturn mock()
+        on { createFont() } doReturn mockXSSFFont
+        on { createCellStyle() } doReturn mockXSSFCellStyle
     }
 
     private val wb: Workbook = Workbook(mockXSSFWorkbook, null)
@@ -110,12 +109,45 @@ class ElementsTest {
     }
 
     @Test
+    fun `the cell style should be able to be set via a passed in lambda`() {
+        wb.apply {
+            val style = createCellStyle { fillBackgroundColor = IndexedColors.AQUA.index }
+
+            sheet {
+                row {
+                    cell("Hello, World!", style)
+                }
+            }
+        }
+
+        verify(mockXSSFCell).cellStyle = any()
+        verify(mockXSSFCellStyle).fillBackgroundColor = IndexedColors.AQUA.index
+    }
+
+    @Test
+    fun `a font should be able to be created via a passed in lambda`() {
+        wb.apply {
+            val font = createFont { color = IndexedColors.AQUA.index }
+            val style = createCellStyle { setFont(font) }
+
+            sheet {
+                row {
+                    cell("Hello, World!", style)
+                }
+            }
+        }
+
+        verify(mockXSSFFont).color = IndexedColors.AQUA.index
+        verify(mockXSSFCellStyle).setFont(any())
+    }
+
+    @Test
     fun `styles are passed down from the top if not overrode`() {
         val style = createStyleWith { fillBackgroundColor = IndexedColors.AQUA.index }
 
-        val styalizedWorkbook = Workbook(mockXSSFWorkbook, style)
+        val stylizedWorkbook = Workbook(mockXSSFWorkbook, style)
 
-        styalizedWorkbook.apply {
+        stylizedWorkbook.apply {
             sheet {
                 row {
                     cell("Hello, World!")
