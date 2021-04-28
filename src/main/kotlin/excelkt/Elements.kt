@@ -1,6 +1,10 @@
 package excelkt
 
 import org.apache.poi.xssf.usermodel.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 @DslMarker
 annotation class ExcelElementMarker
@@ -70,10 +74,22 @@ class Cell(
 ) : ExcelElement() {
     init {
         xssfRow.createCell(index).run {
-            setCellValue(content.toString())
+
+            when (content) {
+                is Formula -> setCellFormula(content.content)
+                is Number -> setCellValue(content.toDouble())
+                is Date -> setCellValue(content)
+                is Calendar -> setCellValue(content)
+                is LocalDate -> setCellValue(Date.from(content.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                is LocalDateTime -> setCellValue(Date.from(content.atZone(ZoneId.systemDefault()).toInstant()))
+                else -> setCellValue(content.toString())
+            }
+
             this@Cell.style?.let {
                 cellStyle = it
             }
         }
     }
 }
+
+data class Formula(val content: String)
