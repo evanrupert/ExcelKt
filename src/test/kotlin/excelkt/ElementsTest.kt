@@ -6,6 +6,9 @@ import org.apache.poi.xssf.usermodel.*
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 import com.nhaarman.mockitokotlin2.check as argCheck
 
 class ElementsTest {
@@ -80,15 +83,30 @@ class ElementsTest {
                 row {
                     cell("Hello, First Cell!")
                     cell("Hello, Second Cell!")
+                    cell(100.0)
+                    cell(LocalDate.of(2021, 4, 28))
+                    cell(Formula("A1+A2"))
                 }
             }
         }
 
         verify(mockXSSFRow).createCell(eq(0))
         verify(mockXSSFRow).createCell(eq(1))
+        verify(mockXSSFRow).createCell(eq(2))
+        verify(mockXSSFRow).createCell(eq(3))
+        verify(mockXSSFRow).createCell(eq(4))
 
         verify(mockXSSFCell).setCellValue(eq("Hello, First Cell!"))
         verify(mockXSSFCell).setCellValue(eq("Hello, Second Cell!"))
+        verify(mockXSSFCell).setCellValue(eq(100.0))
+        verify(mockXSSFCell).setCellValue(
+            eq(
+                Date.from(
+                    LocalDate.of(2021, 4, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()
+                )
+            )
+        )
+        verify(mockXSSFCell).setCellFormula(eq("A1+A2"))
     }
 
     @Test
