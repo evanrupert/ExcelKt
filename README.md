@@ -88,3 +88,37 @@ fun Sheet.customersHeader() {
     }
 }
 ```
+### Supported cell data types
+Cells support the following content types:
+- Formula
+- Number
+- Date
+- Calendar
+- LocalDate
+- LocalDateTime
+
+All other types will be converted to strings.
+
+Example of all data types in use:
+```kotlin
+row {
+    cell(Formula("A1 + A2"))
+    cell(12.2)
+    cell(Date())
+    cell(Calendar.getInstance())
+    cell(LocalDate.now())
+    cell(LocalDateTime.now())
+}
+```
+
+### Note on Dates
+By default, dates will display as numbers in Excel.  In order to display them correctly, create a cell style with the `dataFormat` set to your preferred format.  See the following example:
+```kotlin
+row {
+    val cellStyle = createCellStyle {
+        dataFormat = xssfWorkbook.creationHelper.createDataFormat().getFormat("m/d/yy h:mm")
+    }
+
+    cell(Date(), cellStyle)
+}
+```
