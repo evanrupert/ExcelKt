@@ -91,6 +91,7 @@ fun Sheet.customersHeader() {
 ### Supported cell data types
 Cells support the following content types:
 - Formula
+- Boolean
 - Number
 - Date
 - Calendar
@@ -103,6 +104,7 @@ Example of all data types in use:
 ```kotlin
 row {
     cell(Formula("A1 + A2"))
+    cell(true)
     cell(12.2)
     cell(Date())
     cell(Calendar.getInstance())

@@ -77,6 +77,7 @@ class Cell(
 
             when (content) {
                 is Formula -> setCellFormula(content.content)
+                is Boolean -> setCellValue(content)
                 is Number -> setCellValue(content.toDouble())
                 is Date -> setCellValue(content)
                 is Calendar -> setCellValue(content)
