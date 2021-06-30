@@ -8,7 +8,7 @@ fun workbook(style: XSSFCellStyle? = null, init: Workbook.() -> Unit): XSSFWorkb
     Workbook(XSSFWorkbook(), style).apply(init).xssfWorkbook
 
 fun XSSFWorkbook.write(filename: String) {
-    val out = FileOutputStream(filename)
-    write(out)
-    out.close()
+    FileOutputStream(filename).use { out ->
+        write(out)
+    }
 }
