@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.EvanRupert:ExcelKt:v0.1.1")
+    implementation("com.github.EvanRupert:ExcelKt:v0.1.2")
 }
 ```
 If `build.gradle`
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.EvanRupert:ExcelKt:v0.1.1'
+    implementation 'com.github.EvanRupert:ExcelKt:v0.1.2'
 }
 ```
 
