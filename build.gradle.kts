@@ -76,6 +76,7 @@ publishing {
                         id.set("evanrupert")
                         name.set("Evan Rupert")
                         email.set("rupertevanr@gmail.com")
+                        url.set("https://github.com/evanrupert")
                     }
                 }
                 scm {
