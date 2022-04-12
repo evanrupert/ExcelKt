@@ -1,6 +1,6 @@
-package excelkt
+package com.github.evanrupert.excelkt
 
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.*
 import org.junit.Test
@@ -9,17 +9,17 @@ import strikt.assertions.isEqualTo
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
-import com.nhaarman.mockitokotlin2.check as argCheck
+import org.mockito.kotlin.check as argCheck
 
 class ElementsTest {
     private val mockXSSFFont: XSSFFont = mock()
     private val mockXSSFCellStyle: XSSFCellStyle = mock()
     private val mockXSSFCell: XSSFCell = mock()
     private val mockXSSFRow: XSSFRow = mock {
-        on { createCell(com.nhaarman.mockitokotlin2.any()) } doReturn mockXSSFCell
+        on { createCell(org.mockito.kotlin.any()) } doReturn mockXSSFCell
     }
     private val mockXSSFSheet: XSSFSheet = mock {
-        on { createRow(com.nhaarman.mockitokotlin2.any()) } doReturn mockXSSFRow
+        on { createRow(org.mockito.kotlin.any()) } doReturn mockXSSFRow
     }
     private val mockXSSFWorkbook: XSSFWorkbook = mock {
         on { createSheet() } doReturn mockXSSFSheet
