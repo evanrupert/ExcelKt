@@ -1,4 +1,4 @@
-package com.github.evanrupert.excelkt
+package io.github.evanrupert.excelkt
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFWorkbook

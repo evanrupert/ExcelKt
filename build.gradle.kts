@@ -1,4 +1,4 @@
-group = "com.github.evanrupert"
+group = "io.github.evanrupert"
 version = "1.0.0"
 
 plugins {

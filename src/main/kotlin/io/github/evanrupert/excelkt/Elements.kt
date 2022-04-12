@@ -1,4 +1,4 @@
-package com.github.evanrupert.excelkt
+package io.github.evanrupert.excelkt
 
 import org.apache.poi.xssf.usermodel.*
 import java.time.LocalDate

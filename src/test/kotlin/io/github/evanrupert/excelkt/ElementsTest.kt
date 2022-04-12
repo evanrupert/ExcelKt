@@ -1,4 +1,4 @@
-package com.github.evanrupert.excelkt
+package io.github.evanrupert.excelkt
 
 import org.mockito.kotlin.*
 import org.apache.poi.ss.usermodel.IndexedColors
