@@ -8,9 +8,57 @@ An idiomatic Kotlin wrapper over the Apache POI Excel library for easily generat
 - Very lightweight
 
 ### Installation
-In your `build.gradle.kts` or `build.gradle` add the following
 
-If `build.gradle.kts`
+#### Gradle
+
+In your gradle build file add the following:
+
+Kotlin DSL
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.github.evanrupert:excelkt:1.0.2")
+}
+```
+
+Groovy DSL
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.github.evanrupert:excelkt:1.0.2'
+}
+```
+
+#### Maven
+
+In your `pom.xml` file make sure you have the following in your `repositories`:
+```xml
+<repository>
+    <id>mavenCentral</id>
+    <url>https://repo1.maven.org/maven2/</url>
+</repository>
+```
+
+Then add the following to your `dependencies`:
+```xml
+<dependency>
+    <groupId>io.github.evanrupert</groupId>
+    <artifactId>excelkt</artifactId>
+    <version>1.0.2</version>
+</dependency>
+```
+
+#### Legacy Installation
+
+For older versions of ExcelKt (`v0.1.2` and before), which run on kotlin version `1.3.x` and apache poi version `3.9`, add the following to your gradle build file:
+
+Kotlin DSL
 ```kotlin
 repositories {
     jcenter()
@@ -21,7 +69,8 @@ dependencies {
     implementation("com.github.EvanRupert:ExcelKt:v0.1.2")
 }
 ```
-If `build.gradle`
+
+Groovy DSL
 ```groovy
 repositories {
     jcenter()
@@ -29,12 +78,18 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.EvanRupert:ExcelKt:v0.1.2'
+    implementation 'io.github.evanrupert:excelkt:v0.1.2'
 }
 ```
 
+And use `import excelkt.*` instead of `import io.github.evanrupert.excelkt.*`
+
 ### Quick Example
 ```kotlin
+import io.github.evanrupert.excelkt.*
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.IndexedColors
+
 data class Customer(
     val id: String,
     val name: String,
@@ -79,7 +134,7 @@ fun Sheet.customersHeader() {
             color = IndexedColors.PINK.index
         })
 
-        fillPattern = XSSFCellStyle.SOLID_FOREGROUND
+        fillPattern = FillPatternType.SOLID_FOREGROUND
         fillForegroundColor = IndexedColors.AQUA.index
     }
 

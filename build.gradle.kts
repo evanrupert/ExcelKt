@@ -1,5 +1,5 @@
 group = "io.github.evanrupert"
-version = "1.0.0"
+version = "1.0.2"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
@@ -21,7 +21,9 @@ repositories {
 
 dependencies {
     // Apache POI Excel library
-    implementation("org.apache.poi:poi-ooxml:3.9")
+    api("org.apache.poi:poi-ooxml:5.2.2")
+    implementation("org.apache.logging.log4j:log4j-api:2.17.2")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.2")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
@@ -54,7 +56,7 @@ java {
 
 publishing {
     publications {
-        create<MavenPublication>("library") {
+        create<MavenPublication>("ossrh") {
             from(components["java"])
 
             artifact(dokkaJavadocJar)
@@ -87,8 +89,25 @@ publishing {
             }
         }
     }
+
+    repositories {
+        maven {
+            val releaseUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            val snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+
+            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotUrl else releaseUrl)
+
+            credentials {
+                val ossrhUsername: String by project
+                val ossrhPassword: String by project
+
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
 }
 
 signing {
-    sign(publishing.publications["library"])
+    sign(publishing.publications["ossrh"])
 }

@@ -1,6 +1,7 @@
 package io.github.evanrupert.excelkt
 
 import org.apache.poi.xssf.usermodel.*
+import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -57,6 +58,17 @@ class Workbook(
             style = style ?: this.style,
             name = name
         ).apply(init)
+
+    /**
+     * Writes the XSSFWorkbook to the given filename
+     *
+     * @param filename path to which the Excel file will be written
+     */
+    fun write(filename: String) {
+        FileOutputStream(filename).use { out ->
+            xssfWorkbook.write(out)
+        }
+    }
 }
 
 /**
