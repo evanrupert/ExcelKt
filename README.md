@@ -78,7 +78,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.evanrupert:excelkt:v0.1.2'
+    implementation 'com.github.evanrupert:excelkt:v0.1.2'
 }
 ```
 
